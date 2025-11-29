@@ -105,7 +105,7 @@ async def handle_list_tools() -> list[types.Tool]:
                 "properties": {
                     "to_node": {
                         "type": "string",
-                        "description": "Target node ID (mac-studio, macpro51, macbook-air-m3, completeu-server)",
+                        "description": "Target node ID (e.g., orchestrator, builder, researcher, inference)",
                         "enum": CLUSTER_NODE_IDS
                     },
                     "message": {

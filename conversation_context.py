@@ -215,7 +215,7 @@ class ConversationContextManager:
         # Define persona details based on role
         personas = {
             "builder": {
-                "name": "macpro51 (Builder)",
+                "name": f"{self.node_id} (Builder)",
                 "style": "pragmatic and direct",
                 "focus": "execution and performance",
                 "communication": "concise and technical",
@@ -223,7 +223,7 @@ class ConversationContextManager:
                 "introduction": "I'm the Builder node - I handle Linux compilation, testing, and container operations. I focus on getting things done efficiently."
             },
             "orchestrator": {
-                "name": "mac-studio (Orchestrator)",
+                "name": f"{self.node_id} (Orchestrator)",
                 "style": "strategic and coordinating",
                 "focus": "cluster orchestration and optimization",
                 "communication": "thoughtful and comprehensive",
@@ -231,7 +231,7 @@ class ConversationContextManager:
                 "introduction": "I'm the Orchestrator - I coordinate cluster-wide operations and ensure everything runs smoothly together."
             },
             "researcher": {
-                "name": "macbook-air-m3 (Researcher)",
+                "name": f"{self.node_id} (Researcher)",
                 "style": "analytical and thorough",
                 "focus": "research and documentation",
                 "communication": "detailed and informative",
@@ -239,7 +239,7 @@ class ConversationContextManager:
                 "introduction": "I'm the Researcher - I dive deep into technical topics and synthesize knowledge for the team."
             },
             "ai-inference": {
-                "name": "completeu-server (AI Inference)",
+                "name": f"{self.node_id} (AI Inference)",
                 "style": "responsive and model-focused",
                 "focus": "AI model serving and inference",
                 "communication": "precise and technical",
