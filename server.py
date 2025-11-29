@@ -48,6 +48,31 @@ node_config_path = Path.home() / ".claude" / "node-config.json"
 with open(node_config_path) as f:
     NODE_CONFIG = json.load(f)
 
+# Load available cluster node IDs from config or environment
+# Set CLUSTER_NODE_IDS as JSON array: ["node1", "node2", "node3"]
+def _get_cluster_node_ids() -> list:
+    """Get list of valid cluster node IDs."""
+    env_nodes = os.environ.get("CLUSTER_NODE_IDS")
+    if env_nodes:
+        try:
+            return json.loads(env_nodes)
+        except json.JSONDecodeError:
+            pass
+    # Fall back to cluster config file
+    cluster_config_path = Path.home() / ".claude" / "cluster-nodes.json"
+    if cluster_config_path.exists():
+        try:
+            with open(cluster_config_path) as f:
+                config = json.load(f)
+                return list(config.keys()) if isinstance(config, dict) else config
+        except (json.JSONDecodeError, IOError):
+            pass
+    # Default to generic node names
+    return ["orchestrator", "builder", "researcher", "inference"]
+
+import os
+CLUSTER_NODE_IDS = _get_cluster_node_ids()
+
 # Initialize chat client and persona
 chat_client = NodeChatClient(NODE_CONFIG['node_id'], NODE_CONFIG['storage']['base'])
 persona = get_persona(NODE_CONFIG['node_id'], NODE_CONFIG['storage']['base'])
@@ -81,7 +106,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "to_node": {
                         "type": "string",
                         "description": "Target node ID (mac-studio, macpro51, macbook-air-m3, completeu-server)",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "message": {
                         "type": "string",
@@ -105,7 +130,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "with_node": {
                         "type": "string",
                         "description": "Node ID to get history with",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "limit": {
                         "type": "integer",
@@ -227,7 +252,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "node_id": {
                         "type": "string",
                         "description": "Target node ID",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     }
                 },
                 "required": ["node_id"]
@@ -448,7 +473,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "from_node": {
                         "type": "string",
                         "description": "Filter by sender node (optional)",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     }
                 },
                 "required": ["query"]
@@ -488,9 +513,9 @@ async def handle_list_tools() -> list[types.Tool]:
             ALWAYS call this before engaging in substantive conversation with another node.
             It helps you remember who you are and what you know about them!
 
-            Example: Before sending a task request to mac-studio, call this to:
-            - Remember you're the Builder (pragmatic, execution-focused)
-            - See if you've worked with mac-studio before
+            Example: Before sending a task request to the orchestrator, call this to:
+            - Remember your role and persona (pragmatic, execution-focused)
+            - See if you've worked with that node before
             - Recall any past agreements or collaboration patterns
             """,
             inputSchema={
@@ -499,7 +524,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "with_node": {
                         "type": "string",
                         "description": "Node to prepare context for",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "include_history": {
                         "type": "boolean",
@@ -537,7 +562,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "to_node": {
                         "type": "string",
                         "description": "Target node",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "message": {
                         "type": "string",
@@ -565,7 +590,7 @@ async def handle_list_tools() -> list[types.Tool]:
             Facts are stored persistently and will be included in future
             conversation context with that node.
 
-            Example: After mac-studio says they prefer detailed status updates,
+            Example: After the orchestrator says they prefer detailed status updates,
             store: fact_type="preference", content="Prefers detailed status updates"
             """,
             inputSchema={
@@ -574,7 +599,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "about_node": {
                         "type": "string",
                         "description": "Node the fact is about",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "fact_type": {
                         "type": "string",
@@ -615,7 +640,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "with_node": {
                         "type": "string",
                         "description": "Node to get relationship summary for",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     }
                 },
                 "required": ["with_node"]
@@ -639,7 +664,7 @@ async def handle_list_tools() -> list[types.Tool]:
                     "with_node": {
                         "type": "string",
                         "description": "Node the conversation was with",
-                        "enum": ["mac-studio", "macpro51", "macbook-air-m3", "completeu-server"]
+                        "enum": CLUSTER_NODE_IDS
                     },
                     "key_topics": {
                         "type": "array",
