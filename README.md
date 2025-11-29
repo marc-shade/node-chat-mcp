@@ -45,11 +45,13 @@ python server.py
 
 ## Cluster Nodes
 
-Supports communication with:
-- mac-studio (orchestrator)
-- macpro51 (builder)
-- macbook-air-m3 (researcher)
-- completeu-server (inference)
+Supports communication with configurable cluster nodes:
+- orchestrator - coordination, monitoring, routing
+- builder - compilation, testing, containers
+- researcher - analysis, documentation, research
+- inference - AI inference and GPU workloads
+
+Node configuration is loaded from `~/.claude/cluster-nodes.json` or `CLUSTER_NODE_IDS` environment variable.
 
 ## License
 
