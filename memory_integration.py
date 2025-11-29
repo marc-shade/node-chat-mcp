@@ -77,7 +77,7 @@ class NodeChatMemoryIntegration:
             try:
                 import requests
                 # Cloud-first Ollama for embeddings (can also run locally if needed)
-                ollama_url = os.environ.get('OLLAMA_HOST', 'http://Marcs-Mac-Studio.local:11434')
+                ollama_url = os.environ.get('OLLAMA_HOST', 'http://Marcs-<HOSTNAME>.local:11434')
                 response = requests.post(
                     f"{ollama_url}/api/embeddings",
                     json={"model": "nomic-embed-text", "prompt": text},
