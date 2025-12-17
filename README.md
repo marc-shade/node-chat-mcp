@@ -1,6 +1,13 @@
 # Node Chat MCP Server
 
-Real-time inter-node AI communication for distributed agentic clusters.
+[![MCP](https://img.shields.io/badge/MCP-Compatible-blue)](https://modelcontextprotocol.io)
+[![Python](https://img.shields.io/badge/Python-3.10+-green)](https://python.org)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+[![Part of Agentic System](https://img.shields.io/badge/Part_of-Agentic_System-brightgreen)](https://github.com/marc-shade/agentic-system-oss)
+
+> **Real-time inter-node AI communication for distributed agentic clusters.**
+
+Part of the [Agentic System](https://github.com/marc-shade/agentic-system-oss) - a 24/7 autonomous AI framework with persistent memory.
 
 ## Features
 
